@@ -1,64 +1,62 @@
 package com.sky.pro.employeeservice;
+
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-    @Service
+import java.util.HashMap;
+import java.util.Map;
+
+@Service
     public class EmployeeService {
-        private static final int MAX_EMPLOYEES = 10;
-        private List<Employee> employees;
-
-
+        private final Map<String, Employee> employees = new HashMap<>();
 
         public Employee addEmployee(String firstName, String lastName) {
-            if (employees.size() >= MAX_EMPLOYEES) {
-                throw new EmployeeStorageIsFullException();
-            }
-
+            String key = generateKey(firstName, lastName);
             Employee employee = new Employee(firstName, lastName);
-            if (employees.contains(employee)) {
+            if (employees.containsKey(key)) {
                 throw new EmployeeAlreadyAddedException();
             }
-
-            employees.add(employee);
+            employees.put(key, employee);
             return employee;
         }
+
         public Employee removeEmployee(String firstName, String lastName) {
-            Employee employee = new Employee(firstName, lastName);
-            if (!employees.contains(employee)) {
-                throw new EmployeeNotFoundException();
-            }
-
-            employees.remove(employee);
-            return employee;
+            String key = generateKey(firstName, lastName);
+             if (!employees.containsKey(key)) {
+            throw new EmployeeNotFoundException();
         }
 
+        return employees.remove(key);
+    }
         public Employee findEmployee(String firstName, String lastName) {
-            Employee employee = new Employee(firstName, lastName);
-            if (!employees.contains(employee)) {
+            String key = generateKey(firstName, lastName);
+            if (!employees.containsKey(key)) {
                 throw new EmployeeNotFoundException();
             }
 
-            return employee;
+            return employees.get(key);
         }
-        public Set<Employee> getAllEmployees() {
-            return new HashSet<>(employees);
+
+    public Map<String, Employee> getAllEmployees() {
+        return employees;
+    }
+
+    private String generateKey(String firstName, String lastName) {
+        return firstName.toLowerCase() + " " + lastName.toLowerCase();
+    }
+
+    @PostConstruct
+    public void init() {
+            addEmployee("Ostap", "Bender");
+            addEmployee("Ivan", "Ivanov");
+            addEmployee("Petr", "Petrov");
+            addEmployee("Sidor", "Sidorov");
+            addEmployee("Homer", "Simpson");
+            addEmployee("Liza", "Petrova");
+            addEmployee("Senya", "Golden");
+            addEmployee("Jack", "Warner");
+            addEmployee("Michael", "Jordan");
+            addEmployee("Steve", "Jobs");
         }
-        @PostConstruct
-        public void init() {
-            employees = new ArrayList<>();
-            employees.add(new Employee("Ostap", "Bender"));
-            employees.add(new Employee("Ivan", "Ivanov"));
-            employees.add(new Employee("Petr", "Petrov"));
-            employees.add(new Employee("Sidor", "Sidorov"));
-            employees.add(new Employee("Homer", "Simpson"));
-            employees.add(new Employee("Liza", "Petrova"));
-            employees.add(new Employee("Senya", "Golden"));
-            employees.add(new Employee("Jack", "Warner"));
-            employees.add(new Employee("Michael", "Jordan"));
-            employees.add(new Employee("Steve", "Jobs"));
-        }
-}
+    }
+

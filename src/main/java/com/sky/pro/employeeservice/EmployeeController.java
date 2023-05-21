@@ -1,8 +1,8 @@
 package com.sky.pro.employeeservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import java.util.Set;
 
+import java.util.Map;
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
@@ -13,12 +13,12 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    @GetMapping("/add")
+    @PostMapping("/add")
     public Employee addEmployee(@RequestParam String firstName, @RequestParam String lastName) {
         return employeeService.addEmployee(firstName, lastName);
     }
 
-    @GetMapping("/remove")
+    @DeleteMapping("/remove")
     public Employee removeEmployee(@RequestParam String firstName, @RequestParam String lastName) {
         return employeeService.removeEmployee(firstName, lastName);
     }
@@ -27,8 +27,9 @@ public class EmployeeController {
     public Employee findEmployee(@RequestParam String firstName, @RequestParam String lastName) {
         return employeeService.findEmployee(firstName, lastName);
     }
+
     @GetMapping("/all")
-    public Set<Employee> getAllEmployees() {
+    public Map<String, Employee> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
 }
