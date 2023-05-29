@@ -2,6 +2,7 @@ package com.sky.pro.employeeservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.Map;
 @RestController
 @RequestMapping("/employee")
@@ -12,24 +13,24 @@ public class EmployeeController {
     public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
-
-    @PostMapping("/add")
-    public Employee addEmployee(@RequestParam String firstName, @RequestParam String lastName) {
-        return employeeService.addEmployee(firstName, lastName);
+    @GetMapping("/add")
+    public void addEmployee(@RequestParam String firstName, @RequestParam String lastName, @RequestParam Integer salary, @RequestParam Integer departmentId) {
+        employeeService.addEmployee(new Employee(firstName, lastName, salary, departmentId));
     }
 
-    @DeleteMapping("/remove")
-    public Employee removeEmployee(@RequestParam String firstName, @RequestParam String lastName) {
-        return employeeService.removeEmployee(firstName, lastName);
+    @GetMapping("/remove")
+    public void removeEmployee(@RequestParam String firstName, @RequestParam String lastName) {
+        employeeService.removeEmployee(firstName, lastName);
     }
 
     @GetMapping("/find")
-    public Employee findEmployee(@RequestParam String firstName, @RequestParam String lastName) {
-        return employeeService.findEmployee(firstName, lastName);
-    }
+        public Employee findEmployee(@RequestParam String firstName, @RequestParam String lastName) {
+             employeeService.findEmployee(firstName, lastName);
+             return null;
+        }
 
     @GetMapping("/all")
     public Map<String, Employee> getAllEmployees() {
-        return employeeService.getAllEmployees();
+        return (Map<String, Employee>) employeeService.getAllEmployees();
     }
 }
