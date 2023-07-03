@@ -15,21 +15,30 @@ public class DepartmentServiceImpl implements DepartmentService{
     }
 
     @Override
-    public Employee findMaxSalary(Integer departmentId) {
+    public Integer getDepartmentSalarySum(int departmentId) {
         return employeeService.getAllEmployees()
                 .stream()
                 .filter(e -> Objects.equals(e.getDepartmentId(), departmentId))
+                .mapToInt(Employee::getSalary)
+                .sum();
+    }
+    @Override
+    public Employee findMaxSalary(int departmentId) {
+        return employeeService.getAllEmployees()
+                .stream()
+                .filter(e -> Objects.equals((e.getDepartmentId()), departmentId))
                 .max(Comparator.comparingInt(Employee::getSalary))
                 .orElseThrow(() -> new IllegalArgumentException("Missing employee"));
+
     }
 
     @Override
-    public Employee findMinSalary(Integer departmentId) {
+    public Employee findMinSalary(int departmentId) {
         return employeeService.getAllEmployees()
-                    .stream()
-                    .filter(e -> Objects.equals(e.getDepartmentId(), departmentId))
-                    .min(Comparator.comparingInt(Employee::getSalary))
-                    .orElseThrow(() -> new IllegalArgumentException("Missing employee"));
+                .stream()
+                .filter(e -> Objects.equals(e.getDepartmentId(), departmentId))
+                .min(Comparator.comparingInt(Employee::getSalary))
+                .orElseThrow(() -> new IllegalArgumentException("Missing employee"));
 
 
     }

@@ -1,9 +1,6 @@
 package com.sky.pro.employeeservice;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.List;
@@ -18,20 +15,24 @@ public class DepartmentController {
     public DepartmentController(DepartmentService departmentService) {
         this.departmentService = departmentService;
     }
-    @GetMapping ("/max-salary")
-    public Employee getEmployeeWithMaxSalary(@RequestParam Integer departmentId) {
+
+    @GetMapping("/{departmentId}/salary/sum")
+    public Integer getDepartmentSalarySum(@PathVariable Integer departmentId) {
+        return departmentService.getDepartmentSalarySum(departmentId);
+    }
+    @GetMapping("/{departmentId}/salary/max")
+    public Employee getEmployeeWithMaxSalary(@PathVariable int departmentId) {
         return departmentService.findMaxSalary(departmentId);
     }
-    @GetMapping("/min-salary")
-    public Employee getEmployeeWithMinSalary(@RequestParam Integer departmentId) {
+    @GetMapping("/{departmentId}/salary/min")
+    public Employee getEmployeeWithMinSalary(@PathVariable int departmentId) {
         return departmentService.findMinSalary(departmentId);
     }
-    @GetMapping(value = "/all", params = "departmentId")
-    public Collection<Employee> getAllEmployeesInDepartment(@RequestParam Integer departmentId) {
-
+    @GetMapping("/{departmentId}/employees")
+    public Collection<Employee> getAllEmployeesInDepartment(@PathVariable Integer departmentId) {
         return departmentService.findByDepartment(departmentId);
     }
-@GetMapping("/all")
+@GetMapping("/employees")
     public Map<Integer, List<Employee>> getGroupedByDepartment() {
         return departmentService.getGroupedByDepartment();
     }
